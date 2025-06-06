@@ -7,6 +7,7 @@ class FootballMakeNoteViewModel: ObservableObject {
     @Published var replace = ""
     @Published var isHistory = false
     @Published var name = ""
+    @Published var isBack = false
     func saveNote(note: Note, completion: @escaping (Result<Void, Error>) -> Void) {
         let userId = UserSession.shared.ensureUserId()
         

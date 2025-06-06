@@ -196,7 +196,7 @@ struct FootballMakeTacticView: View {
                         
                         Button(action: {
                             captureAndSaveTacticImage()
-                            presentationMode.wrappedValue.dismiss()
+                            footballMakeTacticModel.isBack = true
                         }) {
                             Rectangle()
                                 .fill(Color(red: 28/255, green: 113/255, blue: 224/255))
@@ -217,6 +217,9 @@ struct FootballMakeTacticView: View {
                 }
             }
             .padding(.top)
+        }
+        .fullScreenCover(isPresented: $footballMakeTacticModel.isBack) {
+            FootballTabBarView()
         }
     }
     

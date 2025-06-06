@@ -138,6 +138,10 @@ struct FootballMakeNoteView: View {
         .fullScreenCover(isPresented: $footballMakeNoteModel.isHistory) {
             FootballHistoryView()
         }
+        
+        .fullScreenCover(isPresented: $footballMakeNoteModel.isBack) {
+            FootballTabBarView()
+        }
         .alert(isPresented: $showAlert) {
             Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("OK")))
         }
@@ -171,7 +175,7 @@ struct FootballMakeNoteView: View {
             switch result {
             case .success:
                 DispatchQueue.main.async {
-                    self.presentationMode.wrappedValue.dismiss()
+                    self.footballMakeNoteModel.isBack = true
                 }
             case .failure(let error):
                 alertMessage = "Failed to save note: \(error.localizedDescription)"

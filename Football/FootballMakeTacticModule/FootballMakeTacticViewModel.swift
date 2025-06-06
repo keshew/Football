@@ -2,6 +2,7 @@ import SwiftUI
 
 class FootballMakeTacticViewModel: ObservableObject {
     let contact = FootballMakeTacticModel()
+    @Published var isBack = false
     @Published var movePositions: [CGSize]
     @Published var myPositions: [CGSize]
     @Published var enemyPositions: [CGSize]
