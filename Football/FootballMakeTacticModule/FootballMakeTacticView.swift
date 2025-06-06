@@ -2,9 +2,9 @@ import SwiftUI
 
 struct FootballMakeTacticView: View {
     @StateObject var footballMakeTacticModel =  FootballMakeTacticViewModel()
-    let gridIems = [GridItem(.flexible(), spacing: -160),
-                    GridItem(.flexible(), spacing: -160),
-                    GridItem(.flexible(), spacing: -160)]
+    let gridIems = [GridItem(.flexible(), spacing: UIScreen.main.bounds.width > 900 ? -300 : (UIScreen.main.bounds.width > 600 ? -200 : UIScreen.main.bounds.width > 430 ? -150 : -150)),
+                    GridItem(.flexible(), spacing: UIScreen.main.bounds.width > 900 ? -300 : (UIScreen.main.bounds.width > 600 ? -200 : UIScreen.main.bounds.width > 430 ? -150 : -150)),
+                    GridItem(.flexible(), spacing: UIScreen.main.bounds.width > 900 ? -300 : (UIScreen.main.bounds.width > 600 ? -200 : UIScreen.main.bounds.width > 430 ? -150 : -150))]
     @State var name = ""
     @State private var dragOffset: CGSize = .zero
     @Environment(\.presentationMode) var presentationMode
@@ -253,7 +253,7 @@ struct DraggableMoveImage: View {
     var body: some View {
         Image(imageName)
             .resizable()
-            .frame(width: 25, height: 25)
+            .frame(width: UIScreen.main.bounds.width > 900 ? 25 : (UIScreen.main.bounds.width > 600 ? 25 : UIScreen.main.bounds.width > 430 ? 25 : 20), height: UIScreen.main.bounds.width > 900 ? 25 : (UIScreen.main.bounds.width > 600 ? 25 : UIScreen.main.bounds.width > 430 ? 25 : 20))
             .offset(x: position.width + dragOffset.width, y: position.height + dragOffset.height)
             .gesture(
                 DragGesture()
@@ -277,7 +277,7 @@ struct DraggablePlayerImage: View {
     var body: some View {
         Image(imageName)
             .resizable()
-            .frame(width: 28, height: 28)
+            .frame(width: UIScreen.main.bounds.width > 900 ? 28 : (UIScreen.main.bounds.width > 600 ? 28 : UIScreen.main.bounds.width > 430 ? 28 : 25), height: UIScreen.main.bounds.width > 900 ? 28 : (UIScreen.main.bounds.width > 600 ? 28 : UIScreen.main.bounds.width > 430 ? 28 : 25))
             .offset(x: position.width + dragOffset.width, y: position.height + dragOffset.height)
             .gesture(
                 DragGesture()

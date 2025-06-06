@@ -36,7 +36,6 @@ struct FootballCreateFirstTeamView: View {
         let team = footballCreateFirstTeamModel.isSecond ? footballCreateFirstTeamModel.secondTeam : footballCreateFirstTeamModel.firstTeam
         let index = footballCreateFirstTeamModel.currentIndex
         
-        // Безопасно проверяем, что индекс не выходит за пределы массива
         guard index < team.playersPosition.count, index < team.icon.count else {
             alertMessage = "Invalid player index."
             return false

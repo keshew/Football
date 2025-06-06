@@ -2,8 +2,8 @@ import SwiftUI
 
 struct FootballEventsView: View {
     @StateObject var footballEventsModel =  FootballEventsViewModel()
-    let gridIems = [GridItem(.flexible(), spacing: -40),
-                    GridItem(.flexible(), spacing: -40)]
+    let gridIems = [GridItem(.flexible(), spacing: UIScreen.main.bounds.width > 900 ? -100 : (UIScreen.main.bounds.width > 600 ? -50 : UIScreen.main.bounds.width > 430 ? -40 : -40)),
+                    GridItem(.flexible(), spacing: UIScreen.main.bounds.width > 900 ? -100 : (UIScreen.main.bounds.width > 600 ? -50 : UIScreen.main.bounds.width > 430 ? -40 : -40))]
     var body: some View {
         ZStack {
             Image(.bg)
@@ -16,71 +16,80 @@ struct FootballEventsView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-                        ForEach(footballEventsModel.events.indices, id: \.self) { index in
-                            let event = footballEventsModel.events[index]
-                            
-                            Rectangle()
-                                .fill(Color(red: 0/255, green: 57/255, blue: 164/255))
-                                .overlay {
-                                    RoundedRectangle(cornerRadius: 24)
-                                        .stroke(.white, lineWidth: 5)
+                        Group {
+                            if footballEventsModel.events.isEmpty {
+                                Text("CREATE YOUR FIRST\nEVENT!")
+                                    .AgenorBold(size: 24)
+                                    .multilineTextAlignment(.center)
+                                    .padding(.top, 50)
+                            } else {
+                                ForEach(footballEventsModel.events.indices, id: \.self) { index in
+                                    let event = footballEventsModel.events[index]
+                                    
+                                    Rectangle()
+                                        .fill(Color(red: 0/255, green: 57/255, blue: 164/255))
                                         .overlay {
-                                            HStack {
-                                                VStack(spacing: 8) {
-                                                    LazyVGrid(columns: gridIems) {
-                                                        ForEach(0..<event.teamMine.icon.count, id: \.self) { i in
-                                                            Image(event.teamMine.icon[i])
-                                                                .resizable()
-                                                                .frame(width: 28, height: 28)
+                                            RoundedRectangle(cornerRadius: 24)
+                                                .stroke(.white, lineWidth: 5)
+                                                .overlay {
+                                                    HStack {
+                                                        VStack(spacing: 8) {
+                                                            LazyVGrid(columns: gridIems) {
+                                                                ForEach(0..<event.teamMine.icon.count, id: \.self) { i in
+                                                                    Image(event.teamMine.icon[i])
+                                                                        .resizable()
+                                                                        .frame(width: 28, height: 28)
+                                                                }
+                                                            }
+                                                            
+                                                            Text("FIRST\nTEAM")
+                                                                .AgenorBold(size: 8)
+                                                                .multilineTextAlignment(.center)
                                                         }
-                                                    }
-                                                    
-                                                    Text("FIRST\nTEAM")
-                                                        .AgenorBold(size: 8)
-                                                        .multilineTextAlignment(.center)
-                                                }
-                                                
-                                                VStack {
-                                                    Text(event.nameEvent)
-                                                        .AgenorBold(size: 12)
-                                                    
-                                                    Spacer()
-                                                    
-                                                    Text("--1:3--")
-                                                        .AgenorBold(size: 14)
-                                                    
-                                                    Spacer()
-                                                    
-                                                    VStack(spacing: 0) {
-                                                        Text(event.time)
-                                                            .AgenorBold(size: 12)
                                                         
-                                                        Text(event.date)
-                                                            .AgenorBold(size: 12)
-                                                    }
-                                                }
-                                                .padding(.vertical, 15)
-                                                
-                                                VStack(spacing: 8) {
-                                                    LazyVGrid(columns: gridIems) {
-                                                        ForEach(0..<event.teamEnemy.icon.count, id: \.self) { i in
-                                                            Image(event.teamEnemy.icon[i])
-                                                                .resizable()
-                                                                .frame(width: 28, height: 28)
+                                                        VStack {
+                                                            Text(event.nameEvent)
+                                                                .AgenorBold(size: 12)
+                                                            
+                                                            Spacer()
+                                                            
+                                                            Text("--1:3--")
+                                                                .AgenorBold(size: 14)
+                                                            
+                                                            Spacer()
+                                                            
+                                                            VStack(spacing: 0) {
+                                                                Text(event.time)
+                                                                    .AgenorBold(size: 12)
+                                                                
+                                                                Text(event.date)
+                                                                    .AgenorBold(size: 12)
+                                                            }
+                                                        }
+                                                        .padding(.vertical, 15)
+                                                        
+                                                        VStack(spacing: 8) {
+                                                            LazyVGrid(columns: gridIems) {
+                                                                ForEach(0..<event.teamEnemy.icon.count, id: \.self) { i in
+                                                                    Image(event.teamEnemy.icon[i])
+                                                                        .resizable()
+                                                                        .frame(width: 28, height: 28)
+                                                                }
+                                                            }
+                                                            
+                                                            Text("SECOND\nTEAM")
+                                                                .AgenorBold(size: 8)
+                                                                .multilineTextAlignment(.center)
                                                         }
                                                     }
-                                                    
-                                                    Text("SECOND\nTEAM")
-                                                        .AgenorBold(size: 8)
-                                                        .multilineTextAlignment(.center)
                                                 }
-                                            }
                                         }
+                                        .frame(height: 149)
+                                        .cornerRadius(24)
+                                        .padding(.horizontal, UIScreen.main.bounds.width > 600 ? 140 : 40)
+                                        .shadow(radius: 5, y: 5)
                                 }
-                                .frame(height: 149)
-                                .cornerRadius(24)
-                                .padding(.horizontal, 40)
-                                .shadow(radius: 5, y: 5)
+                            }
                         }
                     }
                     .padding(.vertical)
@@ -97,7 +106,7 @@ struct FootballEventsView: View {
                     .resizable()
                     .frame(width: 50, height: 50)
             }
-            .position(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3)
+            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
         }
         .onAppear {
             footballEventsModel.loadEvents()

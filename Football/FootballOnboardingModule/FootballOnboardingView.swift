@@ -12,7 +12,7 @@ struct FootballOnboardingView: View {
             if footballOnboardingModel.currentIndex > 0 {
                 Image(.man)
                     .resizable()
-                    .frame(width: 570, height: 830)
+                    .frame(width: UIScreen.main.bounds.width > 900 ? 1100 : (UIScreen.main.bounds.width > 600 ? 900 : (UIScreen.main.bounds.width > 430 ? 570 : 570)), height: UIScreen.main.bounds.width > 900 ? 1300 : (UIScreen.main.bounds.width > 600 ? 1100 : (UIScreen.main.bounds.width > 430 ? 830 : 820)))
                     .position(x: UIScreen.main.bounds.width / 1.8, y: UIScreen.main.bounds.height / 2.1)
             }
             
@@ -25,8 +25,8 @@ struct FootballOnboardingView: View {
                     
                     Image(footballOnboardingModel.contact.image[footballOnboardingModel.currentIndex])
                         .resizable()
-                        .frame(width: 332, height: 424)
-                        .padding(.top, footballOnboardingModel.currentIndex == 0 ? 40 : 180)
+                        .frame(width: UIScreen.main.bounds.width > 900 ? 600 : (UIScreen.main.bounds.width > 600 ? 480 : (UIScreen.main.bounds.width > 430 ? 332 : 332)), height: UIScreen.main.bounds.width > 900 ? 720 : (UIScreen.main.bounds.width > 600 ? 520 : (UIScreen.main.bounds.width > 430 ? 424 : 424)))
+                        .padding(.top, footballOnboardingModel.currentIndex == 0 ? 40 : UIScreen.main.bounds.width > 900 ? 300 : (UIScreen.main.bounds.width > 600 ? 240 : (UIScreen.main.bounds.width > 430 ? 180 : 120)))
                     
                     HStack {
                         Spacer()
@@ -68,8 +68,8 @@ struct FootballOnboardingView: View {
                             }
                         }
 
-                        .padding(.top, footballOnboardingModel.currentIndex == 0 ? 180 : 40)
-                        .padding(.trailing, 40)
+                        .padding(.top, footballOnboardingModel.currentIndex == 0 ? UIScreen.main.bounds.width > 900 ? 280 : (UIScreen.main.bounds.width > 600 ? 360 : (UIScreen.main.bounds.width > 430 ? 180 : 110)) : UIScreen.main.bounds.width > 900 ? 20 : (UIScreen.main.bounds.width > 600 ? 160 : (UIScreen.main.bounds.width > 430 ? 40 : 30)))
+                        .padding(.trailing, UIScreen.main.bounds.width > 900 ? 100 : (UIScreen.main.bounds.width > 600 ? 80 : (UIScreen.main.bounds.width > 430 ? 40 : 40)))
                     }
                 }
                 .padding(.top, 30)
@@ -78,7 +78,7 @@ struct FootballOnboardingView: View {
             if footballOnboardingModel.currentIndex == 0 {
                 Image(.man)
                     .resizable()
-                    .frame(width: 340, height: 490)
+                    .frame(width: UIScreen.main.bounds.width > 900 ? 590 : (UIScreen.main.bounds.width > 600 ? 550 : (UIScreen.main.bounds.width > 430 ? 340 : 320)), height: UIScreen.main.bounds.width > 900 ? 700 : (UIScreen.main.bounds.width > 600 ? 700 : (UIScreen.main.bounds.width > 430 ? 490 : 420)))
                     .position(x: UIScreen.main.bounds.width / 2.4, y: UIScreen.main.bounds.height / 1.53)
             }
         }
@@ -91,4 +91,3 @@ struct FootballOnboardingView: View {
 #Preview {
     FootballOnboardingView()
 }
-

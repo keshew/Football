@@ -28,7 +28,7 @@ struct FootballTrainingView: View {
                             .fill(LinearGradient(colors: [Color(red: 16/255, green: 102/255, blue: 144/255),
                                                           Color(red: 27/255, green: 160/255, blue: 255/255)], startPoint: .top, endPoint: .bottom))
                             .cornerRadius(20)
-                            .frame(height: 290)
+                            .frame(height: 300)
                             .overlay {
                                 RoundedRectangle(cornerRadius: 20)
                                     .stroke(.white, lineWidth: 2)

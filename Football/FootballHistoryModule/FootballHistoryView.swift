@@ -128,7 +128,7 @@ struct FootballHistoryView: View {
                     .resizable()
                     .frame(width: 50, height: 50)
             }
-            .position(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.3)
+            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
         }
         .onAppear {
             footballHistoryModel.loadNotes()

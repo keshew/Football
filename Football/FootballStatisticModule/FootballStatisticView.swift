@@ -44,7 +44,7 @@ struct FootballStatisticView: View {
                                                 })
                                                 .frame(height: 30)
                                                 .offset(y: -20)
-                                                .padding(.horizontal, 120)
+                                                .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 320 : (UIScreen.main.bounds.width > 430 ? 130 : 130)))
                                             
                                             Text(footballStatisticModel.randomPlayerName)
                                                 .AgenorBold(size: 12)
