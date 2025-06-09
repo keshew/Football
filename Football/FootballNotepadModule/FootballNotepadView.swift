@@ -14,18 +14,18 @@ struct FootballNotepadView: View {
                     Text("HISTORY")
                         .AgenorBold(size: 25)
                     
-                    HStack {
-                        Spacer()
-                        
-                        Button(action: {
-                            footballNotepadModel.isHistory = true
-                        }) {
-                            Image(.history)
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                        }
-                        .padding(.trailing)
-                    }
+//                    HStack {
+//                        Spacer()
+//                        
+//                        Button(action: {
+//                            footballNotepadModel.isHistory = true
+//                        }) {
+//                            Image(.history)
+//                                .resizable()
+//                                .frame(width: 60, height: 60)
+//                        }
+//                        .padding(.trailing)
+//                    }
                 }
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 30) {
@@ -89,24 +89,24 @@ struct FootballNotepadView: View {
                                             .padding(.horizontal, 50)
                                             .shadow(radius: 5, y: 5)
                                         
-                                        Button(action: {
-                                            
-                                        }) {
-                                            Rectangle()
-                                                .fill(Color(red: 28/255, green: 113/255, blue: 224/255))
-                                                .overlay {
-                                                    RoundedRectangle(cornerRadius: 24)
-                                                        .stroke(.white, lineWidth: 4)
-                                                        .overlay {
-                                                            Text("FINISH MATCH")
-                                                                .AgenorBold(size: 16)
-                                                        }
-                                                }
-                                                .cornerRadius(24)
-                                                .frame(height: 53)
-                                                .padding(.horizontal, 120)
-                                                .shadow(radius: 5, y: 5)
-                                        }
+//                                        Button(action: {
+//                                            
+//                                        }) {
+//                                            Rectangle()
+//                                                .fill(Color(red: 28/255, green: 113/255, blue: 224/255))
+////                                                .overlay {
+////                                                    RoundedRectangle(cornerRadius: 24)
+////                                                        .stroke(.white, lineWidth: 4)
+//////                                                        .overlay {
+//////                                                            Text("FINISH MATCH")
+//////                                                                .AgenorBold(size: 16)
+//////                                                        }
+////                                                }
+//                                                .cornerRadius(24)
+//                                                .frame(height: 53)
+//                                                .padding(.horizontal, 120)
+//                                                .shadow(radius: 5, y: 5)
+//                                        }
                                     }
                                 }
                             }
@@ -120,14 +120,14 @@ struct FootballNotepadView: View {
             }
             .padding(.top, 20)
             
-            Button(action: {
-                footballNotepadModel.isAdd = true
-            }) {
-                Image(.addBtn)
-                    .resizable()
-                    .frame(width: 50, height: 50)
-            }
-            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
+//            Button(action: {
+//                footballNotepadModel.isAdd = true
+//            }) {
+//                Image(.addBtn)
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//            }
+//            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
         }
         .fullScreenCover(isPresented: $footballNotepadModel.isAdd) {
             FootballMakeNoteView()
