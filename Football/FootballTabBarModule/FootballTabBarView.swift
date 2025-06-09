@@ -9,7 +9,7 @@ struct FootballTabBarView: View {
             VStack {
                 if selectedTab == .EVENTS {
                     FootballEventsView()
-                } else if selectedTab == .NOTEPAD {
+                } else if selectedTab == .HISTORY {
                     FootballNotepadView()
                 } else if selectedTab == .TACTICS {
                     FootballTacticView()
@@ -40,7 +40,7 @@ struct CustomTabBar: View {
     
     enum TabType: Int {
         case EVENTS
-        case NOTEPAD
+        case HISTORY
         case TACTICS
         case STATISTICS
         case TRAINING
@@ -65,7 +65,7 @@ struct CustomTabBar: View {
             
             HStack(spacing: 0) {
                 TabBarItem(imageName: "tab1", tab: .EVENTS, selectedTab: $selectedTab)
-                TabBarItem(imageName: "tab2", tab: .NOTEPAD, selectedTab: $selectedTab)
+                TabBarItem(imageName: "tab2", tab: .HISTORY, selectedTab: $selectedTab)
                 TabBarItem(imageName: "tab3", tab: .TACTICS, selectedTab: $selectedTab)
                 TabBarItem(imageName: "tab4", tab: .STATISTICS, selectedTab: $selectedTab)
                 TabBarItem(imageName: "tab5", tab: .TRAINING, selectedTab: $selectedTab)

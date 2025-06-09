@@ -197,18 +197,34 @@ struct FootballTrainingView: View {
                                     VStack(spacing: -20) {
                                         Image("train\(index + 1)")
                                             .resizable()
+                                            .cornerRadius(25)
                                             .frame(width: 120, height: 196)
+                                            .overlay {
+                                                RoundedRectangle(cornerRadius: 25)
+                                                    .stroke(.white)
+                                                    .overlay {
+                                                        VStack {
+                                                            Text("\(footballTrainingModel.contact.modelTrain[index])")
+                                                                .AgenorBold(size: 12)
+                                                                .multilineTextAlignment(.center)
+                                                                .padding(.top)
+                                                            Spacer()
+                                                        }
+                                                    }
+                                            }
                                         
                                         Button(action: {
-                                            print("tapped")
                                             if let day = footballTrainingModel.selectedDay {
-                                                footballTrainingModel.toggleTrainingCompleted(for: day, trainingIndex: index)
+                                                footballTrainingModel.toggleTrainingCompleted(for: day, trainingIndex: index, displayedDate: displayedDate)
                                             }
                                         }) {
                                             Rectangle()
-                                                .fill(footballTrainingModel.selectedDay != nil && footballTrainingModel.isTrainingCompleted(for: footballTrainingModel.selectedDay!, trainingIndex: index)
-                                                      ? Color.green
-                                                      : Color(red: 28/255, green: 113/255, blue: 224/255))
+                                                .fill(
+                                                    footballTrainingModel.selectedDay != nil &&
+                                                    footballTrainingModel.isTrainingCompleted(for: footballTrainingModel.selectedDay!, trainingIndex: index, displayedDate: displayedDate)
+                                                    ? Color.green
+                                                    : Color(red: 28/255, green: 113/255, blue: 224/255)
+                                                )
                                                 .frame(height: 35)
                                                 .cornerRadius(24)
                                                 .shadow(radius: 5, y: 5)
@@ -216,7 +232,7 @@ struct FootballTrainingView: View {
                                                     RoundedRectangle(cornerRadius: 24)
                                                         .stroke(.white, lineWidth: 2)
                                                         .overlay {
-                                                            Text(footballTrainingModel.selectedDay != nil && footballTrainingModel.isTrainingCompleted(for: footballTrainingModel.selectedDay!, trainingIndex: index) ? "COMPLETED" : "COMPLETE")
+                                                            Text(footballTrainingModel.selectedDay != nil && footballTrainingModel.isTrainingCompleted(for: footballTrainingModel.selectedDay!, trainingIndex: index, displayedDate: displayedDate) ? "COMPLETED" : "COMPLETE")
                                                                 .AgenorBold(size: 12)
                                                         }
                                                 }
@@ -305,7 +321,9 @@ struct FootballTrainingView: View {
     FootballTrainingView()
 }
 
-struct CompletedTraining: Codable, Hashable {
-    let day: Int  
-    let trainingIndex: Int 
+struct CompletedTraining: Hashable, Codable {
+    let day: Int
+    let month: Int
+    let year: Int
+    let trainingIndex: Int
 }

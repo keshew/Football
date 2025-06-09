@@ -79,8 +79,10 @@ struct FootballMakeNoteView: View {
                                             Text("GOALS")
                                                 .AgenorBold(size: 18)
                                             
-                                            CustomTextFiled2(text: $footballMakeNoteModel.goals, placeholder: "22")
-                                                .padding(.horizontal, 90)
+                                            HStack {
+                                                CustomTextFiled2(text: $footballMakeNoteModel.goals, placeholder: "22")
+                                                    .padding(.horizontal, 90)
+                                            }
                                         }
                                         
                                         VStack {

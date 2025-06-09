@@ -53,7 +53,11 @@ struct FootballEventsView: View {
                                                             
                                                             Spacer()
                                                             
-                                                            Text("--1:3--")
+                                                            let goalsText = index < footballEventsModel.notes.count ? footballEventsModel.notes[index].goals : "0"
+                                                            Text(goalsText)
+                                                                .AgenorBold(size: 14)
+
+                                                            Text("GOALS")
                                                                 .AgenorBold(size: 14)
                                                             
                                                             Spacer()
@@ -110,6 +114,7 @@ struct FootballEventsView: View {
         }
         .onAppear {
             footballEventsModel.loadEvents()
+            footballEventsModel.loadNotes()
         }
         .fullScreenCover(isPresented: $footballEventsModel.isCreate) {
             FootballCreateFirstTeamView()

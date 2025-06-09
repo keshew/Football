@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct Event: Codable {
     var teamEnemy: Team
@@ -31,7 +32,10 @@ struct FootballCreateFirstTeamView: View {
     @State var selectedGlobalIconIndex: Int? = 0
     @State private var showAlert = false
     @State private var alertMessage = ""
-    
+    @State private var selectedImages: [UIImage?] = Array(repeating: nil, count: 6)
+    @State private var isImagePickerPresented: [Bool] = Array(repeating: false, count: 6)
+    @State private var currentPickerIndex: Int? = nil
+
     func validateCurrentPlayer() -> Bool {
         let team = footballCreateFirstTeamModel.isSecond ? footballCreateFirstTeamModel.secondTeam : footballCreateFirstTeamModel.firstTeam
         let index = footballCreateFirstTeamModel.currentIndex
@@ -97,25 +101,26 @@ struct FootballCreateFirstTeamView: View {
                                                         RoundedRectangle(cornerRadius: 24)
                                                             .stroke(.white, lineWidth: 5)
                                                             .overlay {
-                                                                Rectangle()
-                                                                    .fill(Color(red: 17/255, green: 40/255, blue: 62/255))
-                                                                    .overlay {
-                                                                        RoundedRectangle(cornerRadius: 8)
-                                                                            .stroke(.white, lineWidth: 3)
-                                                                            .overlay {
-                                                                                Text("PLAYER#\(index + 1) name")
-                                                                                    .AgenorBold(size: 12)
-                                                                            }
+                                                                CustomTextFiled2(text: Binding(
+                                                                    get: {
+                                                                        footballCreateFirstTeamModel.isSecond ?
+                                                                        footballCreateFirstTeamModel.secondTeam.playersName[index] :
+                                                                        footballCreateFirstTeamModel.firstTeam.playersName[index]
+                                                                    },
+                                                                    set: { newValue in
+                                                                        if footballCreateFirstTeamModel.isSecond {
+                                                                            footballCreateFirstTeamModel.secondTeam.playersName[index] = newValue
+                                                                        } else {
+                                                                            footballCreateFirstTeamModel.firstTeam.playersName[index] = newValue
+                                                                        }
                                                                     }
-                                                                    .frame(height: 30)
-                                                                    .cornerRadius(8)
-                                                                    .padding(.horizontal, 50)
+                                                                ), placeholder: "PLAYER#\(index + 1) name")
                                                             }
                                                     })
-                                                    .frame(height: 50)
+                                                    .frame(height: 65)
                                                     .cornerRadius(24)
                                                     .shadow(radius: 5, y: 5)
-                                                    .offset(y: -104)
+                                                    .offset(y: -111)
                                                 
                                             }
                                         
@@ -138,22 +143,54 @@ struct FootballCreateFirstTeamView: View {
                                             Text("CHOOSE PHOTO")
                                                 .AgenorBold(size: 10)
                                             
-                                            Image(.defaultPhoto)
-                                                .resizable()
-                                                .frame(width: 43, height: 43)
-                                                .overlay {
-                                                    Circle()
-                                                        .stroke(.white, lineWidth: 2)
-                                                    
-                                                    Button(action: {
-                                                        
-                                                    }) {
-                                                        Image(.choosePhoto)
-                                                            .resizable()
-                                                            .frame(width: 17, height: 17)
-                                                    }
-                                                    .offset(y: 20)
-                                                }
+                                            ZStack {
+                                                   if let image = selectedImages[index] {
+                                                       Image(uiImage: image)
+                                                           .resizable()
+                                                           .frame(width: 43, height: 43)
+                                                           .clipShape(Circle())
+                                                           .overlay(
+                                                               Circle()
+                                                                   .stroke(Color.white, lineWidth: 2)
+                                                           )
+                                                   } else {
+                                                       Image(.defaultPhoto)
+                                                           .resizable()
+                                                           .frame(width: 43, height: 43)
+                                                           .clipShape(Circle())
+                                                           .overlay(
+                                                               Circle()
+                                                                   .stroke(Color.white, lineWidth: 2)
+                                                           )
+                                                   }
+                                                   
+                                                   Button(action: {
+                                                       currentPickerIndex = index
+                                                       isImagePickerPresented[index] = true
+                                                   }) {
+                                                       Image(.choosePhoto)
+                                                           .resizable()
+                                                           .frame(width: 17, height: 17)
+                                                   }
+                                                   .offset(y: 20)
+                                               }
+                                               .sheet(isPresented: Binding(
+                                                   get: { isImagePickerPresented[index] },
+                                                   set: { isImagePickerPresented[index] = $0 }
+                                               )) {
+                                                   if let currentIndex = currentPickerIndex, currentIndex == index {
+                                                       ImagePicker(
+                                                           image: Binding(
+                                                               get: { selectedImages[index] },
+                                                               set: { selectedImages[index] = $0 }
+                                                           ),
+                                                           isPresented: Binding(
+                                                               get: { isImagePickerPresented[index] },
+                                                               set: { isImagePickerPresented[index] = $0 }
+                                                           )
+                                                       )
+                                                   }
+                                               }
                                             
                                             Text("CHOOSE ICON")
                                                 .AgenorBold(size: 10)
@@ -191,7 +228,7 @@ struct FootballCreateFirstTeamView: View {
                                         }
                                         .offset(y: 24)
                                     })
-                                    .frame(height: 258)
+                                    .frame(height: 288)
                                     .cornerRadius(24)
                                     .padding(.horizontal, 60)
                                     .shadow(radius: 5, y: 5)
@@ -208,72 +245,137 @@ struct FootballCreateFirstTeamView: View {
                                                         RoundedRectangle(cornerRadius: 24)
                                                             .stroke(.white, lineWidth: 5)
                                                             .overlay {
-                                                                Rectangle()
-                                                                    .fill(Color(red: 17/255, green: 40/255, blue: 62/255))
-                                                                    .overlay {
-                                                                        RoundedRectangle(cornerRadius: 8)
-                                                                            .stroke(.white, lineWidth: 3)
-                                                                            .overlay {
-                                                                                Text("PLAYER#\(index + 1) name")
-                                                                                    .AgenorBold(size: 12)
-                                                                            }
+                                                                CustomTextFiled2(text: Binding(
+                                                                    get: {
+                                                                        footballCreateFirstTeamModel.isSecond ?
+                                                                        footballCreateFirstTeamModel.secondTeam.playersName[index] :
+                                                                        footballCreateFirstTeamModel.firstTeam.playersName[index]
+                                                                    },
+                                                                    set: { newValue in
+                                                                        if footballCreateFirstTeamModel.isSecond {
+                                                                            footballCreateFirstTeamModel.secondTeam.playersName[index] = newValue
+                                                                        } else {
+                                                                            footballCreateFirstTeamModel.firstTeam.playersName[index] = newValue
+                                                                        }
                                                                     }
-                                                                    .frame(height: 30)
-                                                                    .cornerRadius(8)
-                                                                    .padding(.horizontal, 50)
+                                                                ), placeholder: "PLAYER#\(index + 1) name")
                                                             }
                                                     })
-                                                    .frame(height: 50)
+                                                    .frame(height: 65)
                                                     .cornerRadius(24)
                                                     .shadow(radius: 5, y: 5)
-                                                    .offset(y: -104)
+                                                    .offset(y: -111)
                                                 
                                             }
                                         
                                         VStack(spacing: 10) {
-                                            CustomTextFiled(text: $name, placeholder: "WRITE HERE POSITION")
+                                            CustomTextFiled(text: Binding(
+                                                get: {
+                                                    footballCreateFirstTeamModel.isSecond ?
+                                                    footballCreateFirstTeamModel.secondTeam.playersPosition[index] :
+                                                    footballCreateFirstTeamModel.firstTeam.playersPosition[index]
+                                                },
+                                                set: { newValue in
+                                                    if footballCreateFirstTeamModel.isSecond {
+                                                        footballCreateFirstTeamModel.secondTeam.playersPosition[index] = newValue
+                                                    } else {
+                                                        footballCreateFirstTeamModel.firstTeam.playersPosition[index] = newValue
+                                                    }
+                                                }
+                                            ), placeholder: "WRITE HERE POSITION")
                                             
                                             Text("CHOOSE PHOTO")
                                                 .AgenorBold(size: 10)
                                             
-                                            Image(.defaultPhoto)
-                                                .resizable()
-                                                .frame(width: 43, height: 43)
-                                                .overlay {
-                                                    Circle()
-                                                        .stroke(.white, lineWidth: 2)
-                                                    
-                                                    Button(action: {
-                                                        
-                                                    }) {
-                                                        Image(.choosePhoto)
-                                                            .resizable()
-                                                            .frame(width: 17, height: 17)
-                                                    }
-                                                    .offset(y: 20)
-                                                }
+                                            ZStack {
+                                                   if let image = selectedImages[index] {
+                                                       Image(uiImage: image)
+                                                           .resizable()
+                                                           .frame(width: 43, height: 43)
+                                                           .clipShape(Circle())
+                                                           .overlay(
+                                                               Circle()
+                                                                   .stroke(Color.white, lineWidth: 2)
+                                                           )
+                                                   } else {
+                                                       Image(.defaultPhoto)
+                                                           .resizable()
+                                                           .frame(width: 43, height: 43)
+                                                           .clipShape(Circle())
+                                                           .overlay(
+                                                               Circle()
+                                                                   .stroke(Color.white, lineWidth: 2)
+                                                           )
+                                                   }
+                                                   
+                                                   Button(action: {
+                                                       currentPickerIndex = index
+                                                       isImagePickerPresented[index] = true
+                                                   }) {
+                                                       Image(.choosePhoto)
+                                                           .resizable()
+                                                           .frame(width: 17, height: 17)
+                                                   }
+                                                   .offset(y: 20)
+                                               }
+                                               .sheet(isPresented: Binding(
+                                                   get: { isImagePickerPresented[index] },
+                                                   set: { isImagePickerPresented[index] = $0 }
+                                               )) {
+                                                   if let currentIndex = currentPickerIndex, currentIndex == index {
+                                                       ImagePicker(
+                                                           image: Binding(
+                                                               get: { selectedImages[index] },
+                                                               set: { selectedImages[index] = $0 }
+                                                           ),
+                                                           isPresented: Binding(
+                                                               get: { isImagePickerPresented[index] },
+                                                               set: { isImagePickerPresented[index] = $0 }
+                                                           )
+                                                       )
+                                                   }
+                                               }
                                             
                                             Text("CHOOSE ICON")
                                                 .AgenorBold(size: 10)
                                                 .padding(.top, 5)
                                             
                                             HStack {
-                                                ForEach(0..<4, id: \.self) { index in
+                                                ForEach(0..<4, id: \.self) { iconIndex in
+                                                    let iconName = "iconBoy\(iconIndex + 1)"
+                                                    
                                                     Button(action: {
-                                                        
+                                                        if footballCreateFirstTeamModel.isSecond {
+                                                            footballCreateFirstTeamModel.secondTeam.icon[index] = iconName
+                                                        } else {
+                                                            footballCreateFirstTeamModel.firstTeam.icon[index] = iconName
+                                                        }
                                                     }) {
-                                                        Image(.iconBoy1)
+                                                        Image(iconName)
                                                             .resizable()
                                                             .frame(width: 30, height: 30)
+                                                            .overlay(
+                                                                RoundedRectangle(cornerRadius: 15)
+                                                                    .stroke(
+                                                                        (footballCreateFirstTeamModel.isSecond ?
+                                                                         footballCreateFirstTeamModel.secondTeam.icon[index] :
+                                                                         footballCreateFirstTeamModel.firstTeam.icon[index]) == iconName ? Color.blue : Color.clear,
+                                                                        lineWidth: 3
+                                                                    )
+                                                            )
                                                     }
+                                                    .buttonStyle(.plain)
                                                 }
                                             }
+
+
                                         }
                                         .offset(y: 24)
                                     })
-                                    .frame(height: 258)
+                                    .frame(height: 288)
                                     .cornerRadius(24)
                                     .padding(.horizontal, 60)
+                                    .disabled(true)
                                     .shadow(radius: 5, y: 5)
                                     .opacity(0.5)
                             }
@@ -341,4 +443,45 @@ struct FootballCreateFirstTeamView: View {
 
 #Preview {
     FootballCreateFirstTeamView()
+}
+
+struct ImagePicker: UIViewControllerRepresentable {
+    @Binding var image: UIImage?
+    @Binding var isPresented: Bool
+    
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let imagePicker = UIImagePickerController()
+        imagePicker.sourceType = .photoLibrary
+        imagePicker.delegate = context.coordinator
+        return imagePicker
+    }
+    
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {
+        if !isPresented {
+            uiViewController.dismiss(animated: true)
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+    
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        var parent: ImagePicker
+        
+        init(_ parent: ImagePicker) {
+            self.parent = parent
+        }
+        
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+            if let uiImage = info[.originalImage] as? UIImage {
+                parent.image = uiImage
+            }
+            parent.isPresented = false
+        }
+        
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            parent.isPresented = false
+        }
+    }
 }

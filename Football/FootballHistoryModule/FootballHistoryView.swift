@@ -13,19 +13,19 @@ struct FootballHistoryView: View {
                 VStack(spacing: 0) {
                     Text("HISTORY")
                         .AgenorBold(size: 25)
-                    
-                    HStack {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(.backBtn)
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                        }
-                        .padding(.leading)
-                        
-                        Spacer()
-                    }
+//                    
+//                    HStack {
+//                        Button(action: {
+//                            presentationMode.wrappedValue.dismiss()
+//                        }) {
+//                            Image(.backBtn)
+//                                .resizable()
+//                                .frame(width: 60, height: 60)
+//                        }
+//                        .padding(.leading)
+//                        
+//                        Spacer()
+//                    }
                 }
                 
                 ScrollView(showsIndicators: false) {
@@ -121,14 +121,14 @@ struct FootballHistoryView: View {
             }
             .padding(.top, 20)
             
-            Button(action: {
-                footballHistoryModel.isNote = true
-            }) {
-                Image(.addBtn)
-                    .resizable()
-                    .frame(width: 50, height: 50)
-            }
-            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
+//            Button(action: {
+//                footballHistoryModel.isNote = true
+//            }) {
+//                Image(.addBtn)
+//                    .resizable()
+//                    .frame(width: 50, height: 50)
+//            }
+//            .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
         }
         .onAppear {
             footballHistoryModel.loadNotes()

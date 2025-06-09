@@ -11,7 +11,7 @@ struct FootballNotepadView: View {
             
             VStack {
                 VStack(spacing: 0) {
-                    Text("NOTEPAD")
+                    Text("HISTORY")
                         .AgenorBold(size: 25)
                     
                     HStack {

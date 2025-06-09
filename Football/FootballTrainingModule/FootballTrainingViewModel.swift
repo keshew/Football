@@ -38,7 +38,6 @@ class FootballTrainingViewModel: ObservableObject {
        
        private let completedKey = "completedTrainingsKey"
        
-       
        func loadCompletedTrainings() {
            guard let data = UserDefaults.standard.data(forKey: completedKey),
                  let saved = try? JSONDecoder().decode(Set<CompletedTraining>.self, from: data) else {
@@ -54,18 +53,25 @@ class FootballTrainingViewModel: ObservableObject {
            }
        }
        
-       func toggleTrainingCompleted(for day: Int, trainingIndex: Int) {
-           let training = CompletedTraining(day: day, trainingIndex: trainingIndex)
-           if completedTrainings.contains(training) {
-               completedTrainings.remove(training)
-           } else {
-               completedTrainings.insert(training)
-           }
-           saveCompletedTrainings()
-       }
-       
-       func isTrainingCompleted(for day: Int, trainingIndex: Int) -> Bool {
-           let training = CompletedTraining(day: day, trainingIndex: trainingIndex)
-           return completedTrainings.contains(training)
-       }
+    func toggleTrainingCompleted(for day: Int, trainingIndex: Int, displayedDate: Date) {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: displayedDate)
+        guard let year = components.year, let month = components.month else { return }
+        let training = CompletedTraining(day: day, month: month, year: year, trainingIndex: trainingIndex)
+        if completedTrainings.contains(training) {
+            completedTrainings.remove(training)
+        } else {
+            completedTrainings.insert(training)
+        }
+        saveCompletedTrainings()
+    }
+
+    func isTrainingCompleted(for day: Int, trainingIndex: Int, displayedDate: Date) -> Bool {
+        let calendar = Calendar.current
+        let components = calendar.dateComponents([.year, .month], from: displayedDate)
+        guard let year = components.year, let month = components.month else { return false }
+        let training = CompletedTraining(day: day, month: month, year: year, trainingIndex: trainingIndex)
+        return completedTrainings.contains(training)
+    }
+
 }

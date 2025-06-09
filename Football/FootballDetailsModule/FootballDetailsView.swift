@@ -152,7 +152,7 @@ struct FootballDetailsView: View {
             Alert(title: Text("Error"), message: Text(alertMessage), dismissButton: .default(Text("ОК")))
         }
         .fullScreenCover(isPresented: $footballDetailsModel.isTab) {
-            FootballTabBarView()
+            FootballIntroduceTeamsView(teamEnemy: teamEnemy, teamMine: teamMine, nameEvent: nameEvent)
         }
     }
 }

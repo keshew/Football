@@ -3,6 +3,21 @@ import SwiftUI
 struct FootballStatisticView: View {
     @StateObject var footballStatisticModel =  FootballStatisticViewModel()
 
+    private var sectors: [StatSector] {
+        [
+            .init(value: Double(footballStatisticModel.totalGoals), color: Color(red: 94/255, green: 0/255, blue: 255/255)),
+            .init(value: Double(footballStatisticModel.totalGames), color: Color(red: 47/255, green: 0/255, blue: 255/255)),
+            .init(value: Double(footballStatisticModel.dribbling), color: Color(red: 94/255, green: 92/255, blue: 255/255)),
+            .init(value: Double(footballStatisticModel.accuracyStrikes), color: Color(red: 222/255, green: 0/255, blue: 0/255)),
+            .init(value: Double(footballStatisticModel.endurance), color: Color(red: 222/255, green: 129/255, blue: 0/255)),
+            .init(value: Double(footballStatisticModel.technique), color: Color(red: 42/255, green: 129/255, blue: 0/255)),
+            .init(value: Double(footballStatisticModel.passes), color: Color(red: 42/255, green: 129/255, blue: 186/255))
+        ]
+    }
+    private var total: Int {
+        sectors.map { Int($0.value) }.reduce(0, +)
+    }
+
     var body: some View {
         ZStack {
             Image(.bg)
@@ -90,38 +105,13 @@ struct FootballStatisticView: View {
                                     .stroke(.white, lineWidth: 5)
                                     .overlay {
                                         VStack(spacing: 20) {
-                                            ZStack {
-                                                Circle()
-                                                    .stroke(.white, lineWidth: 5)
-                                                    .frame(width: 100, height: 100)
-                                                    .overlay {
-                                                        VStack(spacing: 5) {
-                                                            Text("\(footballStatisticModel.totalGoals)")
-                                                                .AgenorBold(size: 16)
-                                                            
-                                                            Text("TOTAL")
-                                                                .AgenorBold(size: 16)
-                                                        }
-                                                    }
-                                                
-                                                Circle()
-                                                    .trim(from: 0, to: 0.38)
-                                                    .stroke(
-                                                        Color(red: 18/255, green: 138/255, blue: 204/255),
-                                                        style: StrokeStyle(
-                                                            lineWidth: 5,
-                                                            lineCap: .round,
-                                                            lineJoin: .round
-                                                        )
-                                                    )
-                                                    .frame(width: 100, height: 100)
-                                                    .rotationEffect(.degrees(-90))
-                                            }
+                                            StatisticCircleView(sectors: sectors, total: total)
+                                                .padding(.bottom, 10)
                                             
                                             VStack {
                                                 HStack {
                                                     Rectangle()
-                                                        .fill(.blue)
+                                                        .fill(Color(red: 94/255, green: 0/255, blue: 255))
                                                         .frame(width: 12, height: 12)
                                                     
                                                     Text("GOALS")
@@ -132,44 +122,14 @@ struct FootballStatisticView: View {
                                                     Text("\(footballStatisticModel.totalGoals)")
                                                         .AgenorBold(size: 12)
                                                 }
-                                                .padding(.horizontal, 70)
-                                                
-//                                                HStack {
-//                                                    Rectangle()
-//                                                        .fill(.red)
-//                                                        .frame(width: 12, height: 12)
-//                                                    
-//                                                    Text("wins")
-//                                                        .AgenorBold(size: 12)
-//                                                    
-//                                                    Spacer()
-//                                                    
-//                                                    Text("541")
-//                                                        .AgenorBold(size: 12)
-//                                                }
-//                                                .padding(.horizontal, 70)
-                                                
-//                                                HStack {
-//                                                    Rectangle()
-//                                                        .fill(.blue)
-//                                                        .frame(width: 12, height: 12)
-//                                                    
-//                                                    Text("loses")
-//                                                        .AgenorBold(size: 12)
-//                                                    
-//                                                    Spacer()
-//                                                    
-//                                                    Text("541")
-//                                                        .AgenorBold(size: 12)
-//                                                }
-//                                                .padding(.horizontal, 70)
+                                                .padding(.horizontal, 50)
                                                 
                                                 HStack {
                                                     Rectangle()
-                                                        .fill(.red)
+                                                        .fill(Color(red: 47/255, green: 0/255, blue: 255))
                                                         .frame(width: 12, height: 12)
                                                     
-                                                    Text("games")
+                                                    Text("GAMES")
                                                         .AgenorBold(size: 12)
                                                     
                                                     Spacer()
@@ -177,14 +137,89 @@ struct FootballStatisticView: View {
                                                     Text("\(footballStatisticModel.totalGames)")
                                                         .AgenorBold(size: 12)
                                                 }
-                                                .padding(.horizontal, 70)
+                                                .padding(.horizontal, 50)
+                                                
+                                                HStack {
+                                                    Rectangle()
+                                                        .fill(Color(red: 94/255, green: 92/255, blue: 255))
+                                                        .frame(width: 12, height: 12)
+                                                    
+                                                    Text("DRIBBLING")
+                                                        .AgenorBold(size: 12)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text("\(footballStatisticModel.dribbling)")
+                                                        .AgenorBold(size: 12)
+                                                }
+                                                .padding(.horizontal, 50)
+                                                
+                                                HStack {
+                                                    Rectangle()
+                                                        .fill(Color(red: 222/255, green: 0/255, blue: 0/255))
+                                                        .frame(width: 12, height: 12)
+                                                    
+                                                    Text("Accuracy strikes")
+                                                        .AgenorBold(size: 12)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text("\(footballStatisticModel.accuracyStrikes)")
+                                                        .AgenorBold(size: 12)
+                                                }
+                                                .padding(.horizontal, 50)
+                                                
+                                                HStack {
+                                                    Rectangle()
+                                                        .fill(Color(red: 222/255, green: 129/255, blue: 0/255))
+                                                        .frame(width: 12, height: 12)
+                                                    
+                                                    Text("Endurance")
+                                                        .AgenorBold(size: 12)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text("\(footballStatisticModel.endurance)")
+                                                        .AgenorBold(size: 12)
+                                                }
+                                                .padding(.horizontal, 50)
+                                                
+                                                HStack {
+                                                    Rectangle()
+                                                        .fill(Color(red: 42/255, green: 129/255, blue: 0/255))
+                                                        .frame(width: 12, height: 12)
+                                                    
+                                                    Text("Technique")
+                                                        .AgenorBold(size: 12)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text("\(footballStatisticModel.technique)")
+                                                        .AgenorBold(size: 12)
+                                                }
+                                                .padding(.horizontal, 50)
+                                                
+                                                HStack {
+                                                    Rectangle()
+                                                        .fill(Color(red: 42/255, green: 129/255, blue: 186/255))
+                                                        .frame(width: 12, height: 12)
+                                                    
+                                                    Text("Passes")
+                                                        .AgenorBold(size: 12)
+                                                    
+                                                    Spacer()
+                                                    
+                                                    Text("\(footballStatisticModel.passes)")
+                                                        .AgenorBold(size: 12)
+                                                }
+                                                .padding(.horizontal, 50)
                                             }
                                         }
                                     }
                                 
                                 
                             })
-                            .frame(height: 218)
+                            .frame(height: 308)
                             .cornerRadius(24)
                             .padding(.horizontal, 50)
                             .shadow(radius: 5, y: 5)
@@ -206,5 +241,67 @@ struct FootballStatisticView: View {
 
 #Preview {
     FootballStatisticView()
+}
+
+struct StatSector {
+    let value: Double
+    let color: Color
+}
+
+struct StatisticCircleView: View {
+    let sectors: [StatSector]
+    let total: Int
+    
+    var body: some View {
+        ZStack {
+            // Белый круг
+            Circle()
+                .stroke(.white, lineWidth: 5)
+                .frame(width: 100, height: 100)
+            
+            // Сектора
+            ForEach(0..<sectors.count, id: \.self) { i in
+                let start = angle(for: i)
+                let end = angle(for: i + 1)
+                CircleSector(startAngle: start, endAngle: end)
+                    .stroke(sectors[i].color, lineWidth: 5)
+                    .frame(width: 100, height: 100)
+            }
+            
+            // Текст по центру
+            VStack(spacing: 5) {
+                Text("\(total)")
+                    .AgenorBold(size: 16)
+                Text("TOTAL")
+                    .AgenorBold(size: 16)
+            }
+        }
+    }
+    
+    private var totalValue: Double {
+        sectors.map { $0.value }.reduce(0, +)
+    }
+    
+    private func angle(for index: Int) -> Angle {
+        let sum = sectors.prefix(index).map { $0.value }.reduce(0, +)
+        return .degrees((sum / totalValue) * 360 - 90)
+    }
+}
+
+
+struct CircleSector: Shape {
+    let startAngle: Angle
+    let endAngle: Angle
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let radius = rect.width / 2
+        path.addArc(center: CGPoint(x: rect.midX, y: rect.midY),
+                    radius: radius,
+                    startAngle: startAngle,
+                    endAngle: endAngle,
+                    clockwise: false)
+        return path
+    }
 }
 
