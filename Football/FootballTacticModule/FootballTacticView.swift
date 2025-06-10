@@ -3,7 +3,12 @@ import SwiftUI
 struct FootballTacticView: View {
     @StateObject var footballTacticModel = FootballTacticViewModel()
     @State private var isFirstLaunchFlag: Bool = true
-    @State var isHidden = false
+    @State private var isHidden: Bool
+
+    init() {
+        let isFirst = !UserDefaults.standard.bool(forKey: "123")
+        _isHidden = State(initialValue: !isFirst)
+    }
     
     var body: some View {
         ZStack {
@@ -93,8 +98,8 @@ struct FootballTacticView: View {
                     .resizable()
                     .frame(width: 50, height: 50)
             }
-            .opacity(!isHidden ? 0 : 1)
-            .disabled(!isHidden ? true : false)
+            .opacity(isHidden ? 1 : 0)
+            .disabled(isHidden ? false : true)
             .position(UIScreen.main.bounds.width > 900 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 600 ? CGPoint(x: UIScreen.main.bounds.width / 1.15, y: UIScreen.main.bounds.height / 1.2) : (UIScreen.main.bounds.width > 430 ? CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3) : CGPoint(x: UIScreen.main.bounds.width / 1.2, y: UIScreen.main.bounds.height / 1.3))))
         }
         .fullScreenCover(isPresented: $footballTacticModel.isMake) {
@@ -104,6 +109,7 @@ struct FootballTacticView: View {
             if isFirstLaunchFlag {
                 isFirstLaunchFlag = isFirstLaunch()
             }
+            
             if !isFirstLaunchFlag {
                 footballTacticModel.loadTacticImages()
             }

@@ -87,7 +87,7 @@ struct FootballTimerView: View {
                                                         .foregroundColor(.white)
                                                 }
                                             }
-                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 320 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
+                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 280 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
                                         }
                                         
                                         VStack {
@@ -131,7 +131,7 @@ struct FootballTimerView: View {
                                                         .foregroundColor(.white)
                                                 }
                                             }
-                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 320 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
+                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 280 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
                                         }
                                         
                                         VStack {
@@ -175,7 +175,7 @@ struct FootballTimerView: View {
                                                         .foregroundColor(.white)
                                                 }
                                             }
-                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 320 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
+                                            .padding(.horizontal,  UIScreen.main.bounds.width > 900 ? 400 : (UIScreen.main.bounds.width > 600 ? 280 : (UIScreen.main.bounds.width > 430 ? 60 : 130)))
                                         }
                                     }
                                     .offset(y: 30)
@@ -183,7 +183,7 @@ struct FootballTimerView: View {
                                 })
                                 .frame(height: 398)
                                 .cornerRadius(24)
-                                .padding(.horizontal, 50)
+                                .padding(.horizontal, 40)
                                 .shadow(radius: 5, y: 5)
                             
                             Button(action: {

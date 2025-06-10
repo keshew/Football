@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import Photos
 
 struct Event: Codable {
     var teamEnemy: Team
@@ -202,8 +203,19 @@ struct FootballCreateFirstTeamView: View {
                                                     }
                                                 }
                                                 Button(action: {
-                                                    currentPickerIndex = index
-                                                    isImagePickerPresented[index] = true
+                                                    checkPhotoLibraryPermission { granted in
+                                                        if granted {
+                                                            currentPickerIndex = index
+                                                            // Безопасно расширяем массив, если нужно
+                                                            if isImagePickerPresented.count <= index {
+                                                                isImagePickerPresented += Array(repeating: false, count: index - isImagePickerPresented.count + 1)
+                                                            }
+                                                            isImagePickerPresented[index] = true
+                                                        } else {
+                                                            alertMessage = "Нет доступа к фото. Разрешите доступ в настройках."
+                                                            showAlert = true
+                                                        }
+                                                    }
                                                 }) {
                                                     Image(.choosePhoto)
                                                         .resizable()
@@ -552,6 +564,22 @@ struct FootballCreateFirstTeamView: View {
         let count = footballCreateFirstTeamModel.secondTeam.playersName.count
         selectedImages = Array(repeating: nil, count: count)
         isImagePickerPresented = Array(repeating: false, count: count)
+    }
+    
+    func checkPhotoLibraryPermission(completion: @escaping (Bool) -> Void) {
+        let status = PHPhotoLibrary.authorizationStatus(for: .readWrite)
+        switch status {
+        case .authorized, .limited:
+            completion(true)
+        case .notDetermined:
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { newStatus in
+                DispatchQueue.main.async {
+                    completion(newStatus == .authorized || newStatus == .limited)
+                }
+            }
+        default:
+            completion(false)
+        }
     }
     
     func prepareAndShowDetails() {
