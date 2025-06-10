@@ -65,9 +65,19 @@ struct FootballDetailsView: View {
                                             }
                                         
                                         VStack(spacing: 10) {
-                                            CustomTextFiled2(text: $names[index], placeholder: footballDetailsModel.contact.arrayPlaceholder[index])
-                                                .padding(.horizontal, 40)
-                                                .offset(y: 20)
+                                            if index == 0 {
+                                                CustomTextFiled2(text: $names[index], placeholder: footballDetailsModel.contact.arrayPlaceholder[index])
+                                                    .padding(.horizontal, 40)
+                                                    .offset(y: 20)
+                                            } else if index == 1 {
+                                                DateTF(date: $footballDetailsModel.date)
+                                                    .padding(.horizontal, 50)
+                                                    .offset(y: 20)
+                                            } else {
+                                                TimeTF(time: $footballDetailsModel.time)
+                                                    .padding(.horizontal, 50)
+                                                    .offset(y: 20)
+                                            }
                                         }
                                     })
                                     .frame(height: 158)
@@ -79,38 +89,38 @@ struct FootballDetailsView: View {
                     
                     
                     Button(action: {
-                        if names.contains(where: { $0.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }) {
-                            alertMessage = "Please fill in all fields."
+                        if names[0] == "" {
+                            alertMessage = "Please fill name"
                             showAlert = true
                             return
                         }
                         
-                        let datePattern = #"^\d{2}\.\d{2}$"#
-                        let dateRegex = try! NSRegularExpression(pattern: datePattern)
-                        let dateRange = NSRange(location: 0, length: names[1].utf16.count)
-                        if dateRegex.firstMatch(in: names[1], options: [], range: dateRange) == nil {
-                            alertMessage = "Date must be in the format DD.MM, for example 10.12"
+                        if footballDetailsModel.date == Date(timeIntervalSince1970: 0) {
+                            alertMessage = "Please enter date"
                             showAlert = true
                             return
                         }
                         
-                        let timePattern = #"^\d{2}:\d{2}$"#
-                        let timeRegex = try! NSRegularExpression(pattern: timePattern)
-                        let timeRange = NSRange(location: 0, length: names[2].utf16.count)
-                        if timeRegex.firstMatch(in: names[2], options: [], range: timeRange) == nil {
-                            alertMessage = "Time must be in the format HH:mm, for example 14:42"
+                        if footballDetailsModel.time == Date(timeIntervalSince1970: 0) {
+                            alertMessage = "Please enter time"
                             showAlert = true
                             return
                         }
                         
+                        let dateFormatter = DateFormatter()
+                        dateFormatter.dateFormat = "dd.MM"
+
+                        let timeFormatter = DateFormatter()
+                        timeFormatter.dateFormat = "HH:mm"
+
                         let event = Event(
                             teamEnemy: teamEnemy,
                             teamMine: teamMine,
-                            date: names[1],
-                            time: names[2],
+                            date: dateFormatter.string(from: footballDetailsModel.date),
+                            time: timeFormatter.string(from: footballDetailsModel.time), 
                             nameEvent: names[0]
                         )
-                        
+
                         footballDetailsModel.saveEvent(event: event) { result in
                             switch result {
                             case .success:
@@ -159,4 +169,107 @@ struct FootballDetailsView: View {
 
 #Preview {
     FootballDetailsView(teamEnemy: Team(playersName: [""], playersPosition: [""], icon: [""]), teamMine: Team(playersName: [""], playersPosition: [""], icon: [""]), date: Date(), time: Date(), nameEvent: "")
+}
+
+struct DateTF: View {
+    @Binding var date: Date
+    @State private var selectedDate: Date = Date()
+    var label: String = "DATE"
+    var body: some View {
+        VStack {
+            ZStack {
+                Rectangle()
+                    .fill(Color(red: 17/255, green: 40/255, blue: 62/255))
+                    .frame(height: 40)
+                    .cornerRadius(15)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.white, lineWidth: 2)
+                    }
+                
+                HStack {
+                    if date.timeIntervalSince1970 == 0 {
+                        Text("Enter \(label)")
+                            .AgenorBold(size: 15)
+                    } else {
+                        Text(formattedDate(date: date))
+                            .AgenorBold(size: 15)
+                    }
+                }
+                .padding(.horizontal)
+                
+                DatePicker(
+                    "Date",
+                    selection: $date,
+                    in: Date()...,
+                    displayedComponents: [.date]
+                )
+                .datePickerStyle(.compact)
+                .colorMultiply(.clear)
+                .frame(width: 175, height: 54)
+                .onChange(of: date, perform: { newDate in
+                    selectedDate = newDate
+                })
+               
+            }
+            .labelsHidden()
+        }
+    }
+    
+    func formattedDate(date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "dd MMM yyyy"
+        return formatter.string(from: date)
+    }
+}
+
+struct TimeTF: View {
+    @Binding var time: Date
+    @State private var selectedTime: Date = Date()
+    var label: String = "TIME"
+
+    var body: some View {
+        VStack {
+            ZStack {
+                Rectangle()
+                    .fill(Color(red: 17/255, green: 40/255, blue: 62/255))
+                    .frame(height: 40)
+                    .cornerRadius(15)
+                    .overlay {
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(.white, lineWidth: 2)
+                    }
+
+                HStack {
+                    if time.timeIntervalSince1970 == 0 {
+                        Text("Enter \(label)")
+                            .AgenorBold(size: 15)
+                    } else {
+                        Text(formattedTime(time: time))
+                            .AgenorBold(size: 15)
+                    }
+                }
+                .padding(.horizontal)
+
+                DatePicker(
+                    "Time",
+                    selection: $time,
+                    displayedComponents: [.hourAndMinute]
+                )
+                .datePickerStyle(.compact)
+                .colorMultiply(.clear)
+                .frame(width: 175, height: 54)
+                .onChange(of: time) { newTime in
+                    selectedTime = newTime
+                }
+            }
+            .labelsHidden()
+        }
+    }
+
+    func formattedTime(time: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm"
+        return formatter.string(from: time)
+    }
 }

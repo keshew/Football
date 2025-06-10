@@ -14,28 +14,12 @@ struct FootballTimerView: View {
                 .ignoresSafeArea()
             
             VStack {
-                VStack(spacing: 0) {
-                    Text(nameEvent)
-                        .AgenorBold(size: 25)
-                    
-                    HStack {
-                        Button(action: {
-                            presentationMode.wrappedValue.dismiss()
-                        }) {
-                            Image(.backBtn)
-                                .resizable()
-                                .frame(width: 60, height: 60)
-                        }
-                        .padding(.leading)
-                        
-                        Spacer()
-                    }
-                    .padding(.top, 30)
-                }
+                Text(nameEvent)
+                    .AgenorBold(size: 25)
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 30) {
-                        EightDigitTimerView()
+                        CountdownTimerView()
                         
                         VStack(spacing: -12) {
                             Rectangle()
@@ -283,22 +267,16 @@ struct FootballTimerView: View {
 import SwiftUI
 import Combine
 
-struct EightDigitTimerView: View {
-    @State private var startDate = Date()
-    @State private var elapsed: TimeInterval = 0
+struct CountdownTimerView: View {
+    @State private var remainingTime: TimeInterval = 90 * 60
     @State private var timerSubscription: Cancellable?
     @State private var isRunning = false
 
-    let maxDuration: TimeInterval = 90 * 60
-
     var body: some View {
         VStack(spacing: 20) {
-            Text(formatTime(elapsed))
+            Text(formatTime(remainingTime))
                 .AgenorBold(size: 36)
-//                .onAppear {
-//                    startTimer()
-//                }
-
+            
             HStack(spacing: 40) {
                 Button(action: {
                     if isRunning {
@@ -314,7 +292,7 @@ struct EightDigitTimerView: View {
                 Button(action: {
                     resetTimer()
                 }) {
-                    Text("CLEAR")
+                    Text("RESET")
                         .AgenorBold(size: 16)
                 }
             }
@@ -323,17 +301,14 @@ struct EightDigitTimerView: View {
     }
 
     func startTimer() {
-        if !isRunning {
-            startDate = Date() - elapsed
-            timerSubscription = Timer.publish(every: 0.01, on: .main, in: .common)
+        if !isRunning && remainingTime > 0 {
+            timerSubscription = Timer.publish(every: 1, on: .main, in: .common)
                 .autoconnect()
                 .sink { _ in
-                    let currentElapsed = Date().timeIntervalSince(startDate)
-                    if currentElapsed >= maxDuration {
-                        elapsed = maxDuration
-                        pauseTimer()
+                    if remainingTime > 0 {
+                        remainingTime -= 1
                     } else {
-                        elapsed = currentElapsed
+                        pauseTimer()
                     }
                 }
             isRunning = true
@@ -348,14 +323,14 @@ struct EightDigitTimerView: View {
 
     func resetTimer() {
         pauseTimer()
-        elapsed = 0
+        remainingTime = 90 * 60
     }
 
     func formatTime(_ interval: TimeInterval) -> String {
-        let totalMilliseconds = Int((interval * 1000).truncatingRemainder(dividingBy: 1000))
-        let seconds = Int(interval) % 60
-        let minutes = Int(interval) / 60 % 60
-        let hours = Int(interval) / 3600
-        return String(format: "%02d:%02d:%02d:%03d", hours, minutes, seconds, totalMilliseconds)
+        let totalSeconds = Int(interval)
+        let hours = totalSeconds / 3600
+        let minutes = (totalSeconds % 3600) / 60
+        let seconds = totalSeconds % 60
+        return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
 }

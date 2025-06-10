@@ -3,6 +3,8 @@ import SwiftUI
 class FootballDetailsViewModel: ObservableObject {
     let contact = FootballDetailsModel()
     let userId = UserSession.shared.ensureUserId()
+    @Published var date = Date(timeIntervalSince1970: 0)
+    @Published var time = Date(timeIntervalSince1970: 0)
     @Published var isTab = false
     func saveEvent(event: Event, completion: @escaping (Result<String, Error>) -> Void) {
         let body: [String: Any] = [

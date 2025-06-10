@@ -42,10 +42,13 @@ struct FootballEventsView: View {
                                                                 }
                                                             }
                                                             
+                                                            Spacer()
+                                                            
                                                             Text("FIRST\nTEAM")
                                                                 .AgenorBold(size: 8)
                                                                 .multilineTextAlignment(.center)
                                                         }
+                                                        .padding(.vertical)
                                                         
                                                         VStack {
                                                             Text(event.nameEvent)
@@ -81,10 +84,13 @@ struct FootballEventsView: View {
                                                                 }
                                                             }
                                                             
+                                                            Spacer()
+                                                            
                                                             Text("SECOND\nTEAM")
                                                                 .AgenorBold(size: 8)
                                                                 .multilineTextAlignment(.center)
                                                         }
+                                                        .padding(.vertical)
                                                     }
                                                 }
                                         }
@@ -95,6 +101,9 @@ struct FootballEventsView: View {
                                 }
                             }
                         }
+                        
+                        Color.clear
+                            .frame(height: 60)
                     }
                     .padding(.vertical)
                 }
